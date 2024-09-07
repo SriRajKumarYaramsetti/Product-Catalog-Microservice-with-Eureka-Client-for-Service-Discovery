@@ -6,7 +6,9 @@ import dev.SriRaj.ProductCatalog.models.Product;
 import dev.SriRaj.ProductCatalog.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +20,13 @@ public class SelfProductServiceImplementation implements SelfProductService {
 
 
     private ProductRepository productRepository;
+    private RestTemplate restTemplate;
 
     @Autowired
-    public SelfProductServiceImplementation(ProductRepository productRepository){
+    public SelfProductServiceImplementation(ProductRepository productRepository,
+                                            RestTemplate restTemplate){
         this.productRepository=productRepository;
+        this.restTemplate=restTemplate;
     }
 
     CreateProductResponseDto convertCreateProductRequestDtoToCreateProductResponseDto(CreateProductRequestDto request){
@@ -52,7 +57,12 @@ public class SelfProductServiceImplementation implements SelfProductService {
     @Override
     public GetProductReponseDto getProductById(Long Id) {
 
+
+        ResponseEntity<User> user=restTemplate.getForEntity("http//AuthorizationServer/Eureka/srirajkumaryaramsetti10@gmail.com", User.class);
+
+
         Optional<Product> optionalProduct = productRepository.findById(Id);
+
 
 
         //If (product.getStatus().equals(PRIVATE){
